@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Quote Generator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+<body class="bg-light d-flex justify-content-center align-items-center vh-100">
+
+<div class="container text-center">
+    <div class="card shadow-lg p-4" style="max-width: 600px; margin: auto;">
+        <div class="card-body">
+            <h5 class="card-title">Random Quote Generator</h5>
+            <p class="card-text fs-4" id="quote">"Click the button to see a quote!"</p>
+            <p class="text-muted" id="author">- Author</p>
+
+            <div class="d-flex justify-content-center gap-3 mt-3">
+                <button class="btn btn-primary" onclick="generateQuote()">Generate Quote</button>
+                <button class="btn btn-outline-success" onclick="likeQuote()">
+                    <i class="bi bi-heart"></i> <!-- Heart Icon -->
+                </button>
+                <button class="btn btn-outline-info" onclick="saveQuote()">
+                    <i class="bi bi-clipboard"></i> <!-- Clipboard Icon -->
+                </button>
+            </div>
+
+            <div class="mt-4">
+                <a href="liked-quotes.html" class="btn btn-secondary">View Liked Quotes</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Array of quotes
+    const quotes = [
+        { text: "The only limit to our realization of tomorrow is our doubts of today.", author: "Franklin D. Roosevelt" },
+        { text: "Do not wait to strike till the iron is hot; but make it hot by striking.", author: "William Butler Yeats" },
+        { text: "The best way to predict your future is to create it.", author: "Peter Drucker" },
+        { text: "Act as if what you do makes a difference. It does.", author: "William James" },
+        { text: "Success is not final, failure is not fatal: It is the courage to continue that counts.", author: "Winston Churchill" }
+    ];
+
+    let currentQuote = {};
+
+    // Function to generate a random quote
+    function generateQuote() {
+        const randomIndex = Math.floor(Math.random() * quotes.length);
+        currentQuote = quotes[randomIndex];
+        document.getElementById("quote").innerText = `"${currentQuote.text}"`;
+        document.getElementById("author").innerText = `- ${currentQuote.author}`;
+    }
+
+    // Function to like a quote
+    function likeQuote() {
+        if (currentQuote.text) {
+            let likedQuotes = JSON.parse(localStorage.getItem("likedQuotes")) || [];
+            // Check if the quote is already liked
+            if (likedQuotes.some(quote => quote.text === currentQuote.text)) {
+                alert("You have already liked this quote!");
+                return;
+            }
+            // Add the quote to liked quotes
+            likedQuotes.push(currentQuote);
+            localStorage.setItem("likedQuotes", JSON.stringify(likedQuotes));
+            alert("Quote added to Liked Quotes!");
+        } else {
+            alert("Please generate a quote first!");
+        }
+    }
+
+    // Function to save a quote to clipboard
+    function saveQuote() {
+        if (currentQuote.text) {
+            const quoteText = `"${currentQuote.text}" - ${currentQuote.author}`;
+            navigator.clipboard.writeText(quoteText).then(() => {
+                alert("Quote copied to clipboard!");
+            }).catch(() => {
+                alert("Failed to copy quote. Please try again.");
+            });
+        } else {
+            alert("Please generate a quote first!");
+        }
+    }
+</script>
+
+</body>
+</html>

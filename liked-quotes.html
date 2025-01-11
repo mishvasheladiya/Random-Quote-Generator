@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liked Quotes</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+<body class="bg-light d-flex justify-content-center align-items-center vh-100">
+
+<div class="container text-center">
+    <div class="card shadow-lg p-4" style="max-width: 600px; margin: auto;">
+        <div class="card-body">
+            <h5 class="card-title">Liked Quotes</h5>
+            <ul class="list-group" id="likedQuotesList">
+                <!-- Liked quotes will be displayed here -->
+            </ul>
+            <div class="mt-4">
+                <a href="queot.html" class="btn btn-secondary">Back to Generator</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Function to display liked quotes
+    function displayLikedQuotes() {
+        const likedQuotes = JSON.parse(localStorage.getItem("likedQuotes")) || [];
+        const likedQuotesList = document.getElementById("likedQuotesList");
+
+        if (likedQuotes.length === 0) {
+            likedQuotesList.innerHTML = "<li class='list-group-item'>No liked quotes yet!</li>";
+        } else {
+            likedQuotesList.innerHTML = likedQuotes.map((quote, index) => `
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    "${quote.text}" - ${quote.author}
+                    <button class="btn btn-danger btn-sm" onclick="removeQuote(${index})">
+                        <i class="bi bi-trash"></i> <!-- Trash Icon -->
+                    </button>
+                </li>
+            `).join("");
+        }
+    }
+
+    // Function to remove (dislike) a quote
+    function removeQuote(index) {
+        let likedQuotes = JSON.parse(localStorage.getItem("likedQuotes")) || [];
+        likedQuotes.splice(index, 1);
+        localStorage.setItem("likedQuotes", JSON.stringify(likedQuotes));
+        displayLikedQuotes();
+    }
+
+    // Initialize liked quotes display
+    displayLikedQuotes();
+</script>
+
+</body>
+</html>
